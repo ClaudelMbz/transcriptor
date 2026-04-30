@@ -1,0 +1,48 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build executables
+      run: |
+        pyinstaller --onefile --windowed --name youtube-transcription-gui youtube_transcription_gui.py
+        pyinstaller --onefile --name youtube-transcription-cli youtube_transcription.py
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/youtube-transcription-gui*
+          dist/youtube-transcription-cli*
+        body: |
+          ## YouTube Transcription Tool
+          
+          Download the appropriate executable for your platform:
+          - GUI version: `youtube-transcription-gui`
+          - CLI version: `youtube-transcription-cli`
+          
+          ### Usage
+          **GUI**: Double-click the executable
+          **CLI**: `youtube-transcription-cli <URL> [language]`
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
