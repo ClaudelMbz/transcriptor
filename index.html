@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Transcription - YouTube & TikTok</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .transcript-area {
+            margin-top: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status.success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status.error {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status.processing {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Video Transcription</h1>
+        <p class="subtitle">YouTube & TikTok</p>
+
+        <div class="info-box">
+            <h3>ℹ️ Mode de fonctionnement</h3>
+            <p>Cette version utilise des APIs publiques pour YouTube. Pour TikTok, vous devrez déployer le backend sur Render/Railway (gratuit). <a href="https://github.com/ClaudelMbz/transcriptor" target="_blank">Voir les instructions</a></p>
+        </div>
+
+        <div class="form-group">
+            <label for="url">URL de la vidéo</label>
+            <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=... ou https://www.tiktok.com/...">
+        </div>
+
+        <div class="form-group">
+            <label>Plateforme</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="platform-auto" name="platform" value="auto" checked>
+                    <label for="platform-auto">Auto</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="platform-youtube" name="platform" value="youtube">
+                    <label for="platform-youtube">YouTube</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="platform-tiktok" name="platform" value="tiktok">
+                    <label for="platform-tiktok">TikTok</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Langue</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="lang-fr" name="language" value="fr" checked>
+                    <label for="lang-fr">Français</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="lang-en" name="language" value="en">
+                    <label for="lang-en">English</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="lang-auto" name="language" value="auto">
+                    <label for="lang-auto">Auto</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="backend-url-group" style="display: none;">
+            <label for="backend-url">URL du Backend (pour TikTok)</label>
+            <input type="text" id="backend-url" placeholder="https://your-app.onrender.com">
+            <small style="color: #666; display: block; margin-top: 5px;">
+                Déployez le backend sur Render/Railway et collez l'URL ici
+            </small>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" id="transcribe-btn" onclick="transcribe()">Transcrire</button>
+            <button class="btn-secondary" onclick="copyText()">Copier</button>
+            <button class="btn-secondary" onclick="clearText()">Effacer</button>
+            <button class="btn-secondary" onclick="downloadText()">Télécharger</button>
+        </div>
+
+        <div id="status" class="status hidden"></div>
+
+        <div class="transcript-area">
+            <label for="transcript">Transcription</label>
+            <textarea id="transcript" placeholder="La transcription apparaîtra ici..."></textarea>
+        </div>
+
+        <footer>
+            Made with ❤️ | <a href="https://github.com/ClaudelMbz/transcriptor" target="_blank">GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        // Détecter si on utilise TikTok pour afficher le champ backend URL
+        document.querySelectorAll('input[name="platform"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const backendUrlGroup = document.getElementById('backend-url-group');
+                if (this.value === 'tiktok') {
+                    backendUrlGroup.style.display = 'block';
+                } else {
+                    backendUrlGroup.style.display = 'none';
+                }
+            });
+        });
+
+        function getSelectedValue(name) {
+            return document.querySelector(`input[name="${name}"]:checked`).value;
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
+
+        function hideStatus() {
+            document.getElementById('status').classList.add('hidden');
+        }
+
+        function extractVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+                /youtube\.com\/embed\/([^&\n?#]+)/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function detectPlatform(url) {
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return 'youtube';
+            } else if (url.includes('tiktok.com')) {
+                return 'tiktok';
+            }
+            return null;
+        }
+
+        async function getYouTubeTranscript(videoId, language) {
+            try {
+                // Utiliser l'API YouTube Transcript via un proxy CORS
+                const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+                    `https://www.youtube.com/watch?v=${videoId}`
+                )}`;
+                
+                // Alternative: utiliser une API tierce
+                const response = await fetch(`https://youtube-transcript-api.p.rapidapi.com/transcript?video_id=${videoId}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'DEMO', // Remplacer par votre clé RapidAPI
+                        'X-RapidAPI-Host': 'youtube-transcript-api.p.rapidapi.com'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('API non disponible. Veuillez déployer le backend.');
+                }
+
+                const data = await response.json();
+                return data.transcript || data.text;
+            } catch (error) {
+                throw new Error('Pour YouTube, veuillez déployer le backend sur Render/Railway (gratuit). Instructions dans le README.');
+            }
+        }
+
+        async function getTikTokTranscript(url, language, backendUrl) {
+            if (!backendUrl) {
+                throw new Error('Veuillez entrer l\'URL de votre backend déployé sur Render/Railway');
+            }
+
+            const response = await fetch(`${backendUrl}/transcribe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url, language, platform: 'tiktok' })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erreur lors de la transcription');
+            }
+
+            return await response.json();
+        }
+
+        async function transcribe() {
+            const url = document.getElementById('url').value.trim();
+            const language = getSelectedValue('language');
+            let platform = getSelectedValue('platform');
+            const backendUrl = document.getElementById('backend-url').value.trim();
+            const transcriptArea = document.getElementById('transcript');
+            const transcribeBtn = document.getElementById('transcribe-btn');
+
+            if (!url) {
+                showStatus('Veuillez entrer une URL', 'error');
+                return;
+            }
+
+            // Détecter la plateforme si auto
+            if (platform === 'auto') {
+                platform = detectPlatform(url);
+                if (!platform) {
+                    showStatus('Impossible de détecter la plateforme', 'error');
+                    return;
+                }
+            }
+
+            transcribeBtn.disabled = true;
+            transcriptArea.value = '';
+            showStatus('<span class="loader"></span>Transcription en cours...', 'processing');
+
+            try {
+                if (platform === 'youtube') {
+                    const videoId = extractVideoId(url);
+                    if (!videoId) {
+                        throw new Error('ID vidéo YouTube invalide');
+                    }
+
+                    // Pour GitHub Pages, on doit utiliser le backend
+                    if (!backendUrl) {
+                        showStatus('⚠️ Pour utiliser cette fonctionnalité, déployez le backend sur Render (gratuit) et entrez l\'URL ci-dessus. <a href="https://github.com/ClaudelMbz/transcriptor#déploiement" target="_blank">Voir les instructions</a>', 'info');
+                        transcribeBtn.disabled = false;
+                        return;
+                    }
+
+                    const response = await fetch(`${backendUrl}/transcribe`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, language, platform: 'youtube' })
+                    });
+
+                    if (!response.ok) throw new Error('Erreur API');
+                    const data = await response.json();
+                    transcriptArea.value = data.transcript;
+                    showStatus('✅ Transcription terminée !', 'success');
+
+                } else if (platform === 'tiktok') {
+                    const data = await getTikTokTranscript(url, language, backendUrl);
+                    
+                    if (data.task_id) {
+                        // Polling pour TikTok
+                        pollTikTokStatus(data.task_id, backendUrl);
+                        return;
+                    }
+                }
+
+            } catch (error) {
+                showStatus(`❌ ${error.message}`, 'error');
+            } finally {
+                if (platform !== 'tiktok') {
+                    transcribeBtn.disabled = false;
+                }
+            }
+        }
+
+        async function pollTikTokStatus(taskId, backendUrl) {
+            const transcriptArea = document.getElementById('transcript');
+            const transcribeBtn = document.getElementById('transcribe-btn');
+
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${backendUrl}/status/${taskId}`);
+                    const data = await response.json();
+
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        transcriptArea.value = data.transcript;
+                        showStatus('✅ Transcription terminée !', 'success');
+                        transcribeBtn.disabled = false;
+                    } else if (data.status === 'error') {
+                        clearInterval(interval);
+                        showStatus(`❌ ${data.error}`, 'error');
+                        transcribeBtn.disabled = false;
+                    } else {
+                        showStatus(`<span class="loader"></span>${data.message}`, 'processing');
+                    }
+                } catch (error) {
+                    clearInterval(interval);
+                    showStatus(`❌ ${error.message}`, 'error');
+                    transcribeBtn.disabled = false;
+                }
+            }, 2000);
+        }
+
+        function copyText() {
+            const transcriptArea = document.getElementById('transcript');
+            if (!transcriptArea.value) {
+                showStatus('Aucun texte à copier', 'info');
+                return;
+            }
+            transcriptArea.select();
+            document.execCommand('copy');
+            showStatus('✅ Texte copié !', 'success');
+        }
+
+        function clearText() {
+            document.getElementById('transcript').value = '';
+            hideStatus();
+        }
+
+        function downloadText() {
+            const transcriptArea = document.getElementById('transcript');
+            if (!transcriptArea.value) {
+                showStatus('Aucun texte à télécharger', 'info');
+                return;
+            }
+
+            const blob = new Blob([transcriptArea.value], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transcription.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            showStatus('✅ Fichier téléchargé !', 'success');
+        }
+
+        // Charger l'URL du backend depuis localStorage
+        window.addEventListener('load', () => {
+            const savedBackendUrl = localStorage.getItem('backendUrl');
+            if (savedBackendUrl) {
+                document.getElementById('backend-url').value = savedBackendUrl;
+            }
+        });
+
+        // Sauvegarder l'URL du backend dans localStorage
+        document.getElementById('backend-url').addEventListener('change', (e) => {
+            localStorage.setItem('backendUrl', e.target.value);
+        });
+    </script>
+</body>
+</html>

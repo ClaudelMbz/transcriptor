@@ -1,77 +1,78 @@
 # YouTube & TikTok Transcription
 
-![Test Status](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/Test%20Application/badge.svg)
+![Deploy to GitHub Pages](https://github.com/ClaudelMbz/transcriptor/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)
 
 Application web pour transcrire des vidéos YouTube et TikTok.
 
-## 🚀 Déploiement Rapide (Sans Docker)
+## 🌐 Demo Live
 
-### Option 1: Render.com (Recommandé - Gratuit)
+**Interface Web:** [https://claudelmbz.github.io/transcriptor/](https://claudelmbz.github.io/transcriptor/)
 
-1. Créez un compte sur [Render.com](https://render.com)
-2. Cliquez sur "New +" → "Web Service"
-3. Connectez votre repo GitHub
-4. Render détectera automatiquement le `render.yaml`
-5. Cliquez sur "Create Web Service"
-6. ✅ Votre app sera déployée automatiquement !
+## 🚀 Déploiement en 2 Étapes
 
-**Configuration automatique via GitHub Actions:**
-- Allez dans Render Dashboard → Settings → Deploy Hook
-- Copiez l'URL du Deploy Hook
-- Dans GitHub: Settings → Secrets → New secret
-  - Name: `RENDER_DEPLOY_HOOK_URL`
-  - Value: [votre deploy hook URL]
-- Chaque push déclenchera un redéploiement automatique
+### Étape 1: Interface Web (GitHub Pages) ✅ DÉJÀ FAIT
 
-### Option 2: Railway.app (Gratuit)
+L'interface est automatiquement déployée sur GitHub Pages à chaque push.
 
-1. Créez un compte sur [Railway.app](https://railway.app)
-2. Cliquez sur "New Project" → "Deploy from GitHub repo"
-3. Sélectionnez votre repo
-4. Railway détectera automatiquement la configuration
-5. ✅ Déployé en quelques secondes !
+### Étape 2: Backend API (Gratuit sur Render)
 
-### Option 3: Vercel (Gratuit)
+Pour que la transcription fonctionne, déployez le backend:
 
-1. Créez un compte sur [Vercel.com](https://vercel.com)
-2. Cliquez sur "Add New" → "Project"
-3. Importez votre repo GitHub
-4. Vercel détectera le `vercel.json`
-5. ✅ Déployé instantanément !
+1. **Créez un compte sur [Render.com](https://render.com)** (gratuit)
+2. **Cliquez "New +" → "Web Service"**
+3. **Connectez ce repo GitHub**
+4. **Render détecte automatiquement `render.yaml`**
+5. **Cliquez "Create Web Service"**
+6. **Copiez l'URL de votre service** (ex: `https://your-app.onrender.com`)
+7. **Collez cette URL dans l'interface web** quand vous l'utilisez
 
-**Note:** Vercel a des limitations pour les fonctions serverless (temps d'exécution limité). Préférez Render ou Railway pour TikTok.
+C'est tout ! 🎉
 
-### Option 4: Heroku (Gratuit avec limitations)
+## 📖 Comment Utiliser
 
-```bash
-# Installer Heroku CLI
-# Puis:
-heroku login
-heroku create your-app-name
-git push heroku main
-heroku open
+1. Allez sur [https://claudelmbz.github.io/transcriptor/](https://claudelmbz.github.io/transcriptor/)
+2. Déployez le backend sur Render (une seule fois)
+3. Collez l'URL du backend dans l'interface
+4. Collez une URL YouTube ou TikTok
+5. Cliquez "Transcrire"
+6. ✅ Votre transcription apparaît !
+
+## 🌟 Fonctionnalités
+
+- ✅ Interface web moderne et responsive
+- ✅ Déployée sur GitHub Pages (comme xVisuals)
+- ✅ Transcription YouTube
+- ✅ Transcription TikTok (via Whisper AI)
+- ✅ Détection automatique de la plateforme
+- ✅ Support multi-langues (Français, English, Auto)
+- ✅ Copie dans le presse-papier
+- ✅ Téléchargement en fichier texte
+- ✅ Sauvegarde de l'URL backend (localStorage)
+
+## 🛠️ Architecture
+
+```
+┌─────────────────────┐
+│  GitHub Pages       │  ← Interface Web (index.html)
+│  (Frontend)         │     Déployée automatiquement
+└──────────┬──────────┘
+           │
+           │ API Calls
+           ▼
+┌─────────────────────┐
+│  Render.com         │  ← Backend Python (app.py)
+│  (Backend API)      │     Déployé manuellement (1 fois)
+└─────────────────────┘
 ```
 
-### Option 5: GitHub Pages (Interface statique uniquement)
+## 📦 Fichiers Principaux
 
-L'interface HTML sera déployée automatiquement sur GitHub Pages, mais sans backend (YouTube/TikTok ne fonctionneront pas).
-
-Pour activer:
-1. Settings → Pages
-2. Source: GitHub Actions
-3. L'interface sera disponible sur: `https://YOUR_USERNAME.github.io/YOUR_REPO`
-
-## 📦 Fichiers de Configuration
-
+- `index.html` - Interface web complète (déployée sur GitHub Pages)
+- `app.py` - Backend Flask (à déployer sur Render)
 - `render.yaml` - Configuration Render
-- `railway.json` - Configuration Railway  
-- `vercel.json` - Configuration Vercel
-- `Procfile` - Configuration Heroku
-- `runtime.txt` - Version Python
-- `.github/workflows/deploy-render.yml` - Auto-déploiement Render
-- `.github/workflows/deploy-pages.yml` - Déploiement GitHub Pages
+- `.github/workflows/deploy-pages.yml` - Auto-déploiement GitHub Pages
 
-## 🛠️ Installation Locale
+## 🔧 Installation Locale (Optionnel)
 
 ```bash
 # Installer FFmpeg
@@ -82,24 +83,36 @@ Pour activer:
 # Installer les dépendances
 pip install -r requirements.txt
 
-# Lancer l'application web
+# Lancer le backend
 python app.py
 
-# Accéder à http://localhost:5000
+# Ouvrir index.html dans un navigateur
+# Entrer http://localhost:5000 comme URL backend
 ```
 
-## 🌟 Fonctionnalités
+## 🎯 Alternatives de Déploiement Backend
 
-- ✅ Interface web responsive et moderne
-- ✅ Transcription YouTube (sous-titres natifs)
-- ✅ Transcription TikTok (via Whisper AI)
-- ✅ Détection automatique de la plateforme
-- ✅ Support multi-langues (Français, English, Auto)
-- ✅ Copie dans le presse-papier
-- ✅ Téléchargement en fichier texte
-- ✅ Interface desktop (tkinter) également disponible
+Si vous ne voulez pas utiliser Render:
 
-## 🖥️ Interface Desktop (GUI)
+### Railway.app
+1. [railway.app](https://railway.app) → "New Project"
+2. Connectez votre repo
+3. ✅ Déployé automatiquement
+
+### Vercel (YouTube uniquement)
+1. [vercel.com](https://vercel.com) → "New Project"
+2. Importez votre repo
+3. ✅ Déployé instantanément
+
+### Heroku
+```bash
+heroku create your-app-name
+git push heroku main
+```
+
+## 🖥️ Interface Desktop (Bonus)
+
+Si vous préférez une application desktop:
 
 ```bash
 pip install -r requirements.txt
@@ -108,64 +121,23 @@ python youtube_transcription_gui.py
 
 ## 🛠️ Technologies
 
+- **Frontend**: HTML, CSS, JavaScript (Vanilla)
 - **Backend**: Flask, Python
 - **Transcription**: youtube-transcript-api, Whisper AI, yt-dlp
-- **Frontend**: HTML, CSS, JavaScript (Vanilla)
-- **Déploiement**: Render, Railway, Vercel, Heroku, GitHub Actions
+- **Déploiement**: GitHub Pages + Render/Railway
 
-## 📝 Variables d'Environnement (Optionnel)
+## 📝 Configuration GitHub Pages
 
-Aucune variable d'environnement n'est requise pour le fonctionnement de base.
+Pour activer GitHub Pages sur votre fork:
 
-## 🎯 Comparaison des Plateformes
-
-| Plateforme | Gratuit | Auto-deploy | TikTok Support | Setup |
-|------------|---------|-------------|----------------|-------|
-| **Render** | ✅ | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
-| **Railway** | ✅ | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
-| **Vercel** | ✅ | ✅ | ⚠️ Limité | ⭐⭐⭐⭐ |
-| **Heroku** | ⚠️ Limité | ✅ | ✅ | ⭐⭐⭐ |
-| **GitHub Pages** | ✅ | ✅ | ❌ | ⭐⭐⭐⭐⭐ |
-
-**Recommandation:** Utilisez **Render.com** ou **Railway.app** pour la meilleure expérience gratuite.
+1. Settings → Pages
+2. Source: **GitHub Actions**
+3. L'interface sera disponible sur: `https://YOUR_USERNAME.github.io/transcriptor/`
 
 ## 📄 Licence
 
 MIT
 
-## Utilisation
+---
 
-### Interface graphique (recommandé)
-
-```bash
-python youtube_transcription_gui.py
-```
-
-L'interface permet de :
-- Coller l'URL YouTube
-- Choisir la langue (Français, English, Auto)
-- Transcrire la vidéo
-- Copier le texte dans le presse-papier
-- Sauvegarder dans un fichier
-
-### Ligne de commande
-
-```bash
-python youtube_transcription.py <URL_YouTube> [langue]
-```
-
-### Exemples
-
-```bash
-# Transcription en français (par défaut)
-python youtube_transcription.py https://www.youtube.com/watch?v=VIDEO_ID
-
-# Transcription en anglais
-python youtube_transcription.py https://www.youtube.com/watch?v=VIDEO_ID en
-```
-
-## Formats d'URL supportés
-
-- `https://www.youtube.com/watch?v=VIDEO_ID`
-- `https://youtu.be/VIDEO_ID`
-- `VIDEO_ID` directement
+Made with ❤️ by [Claudel](https://github.com/ClaudelMbz)
