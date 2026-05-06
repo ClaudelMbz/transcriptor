@@ -1,0 +1,7 @@
+youtube-transcript-api
+pyperclip
+yt-dlp
+openai-whisper
+torch
+flask
+gunicorn
