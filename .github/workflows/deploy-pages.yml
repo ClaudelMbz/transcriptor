@@ -1,0 +1,57 @@
+name: Deploy Static Version to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Create static site
+        run: |
+          mkdir -p _site
+          cp templates/index.html _site/index.html
+          
+          # Créer une page d'information
+          cat > _site/README.md << 'EOF'
+          # Video Transcription Tool
+          
+          Cette page GitHub Pages contient l'interface statique.
+          
+          Pour utiliser l'application complète avec backend, déployez sur:
+          - Render.com (gratuit)
+          - Railway.app (gratuit)
+          - Heroku
+          - Vercel
+          
+          Voir le README principal pour les instructions.
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '_site'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

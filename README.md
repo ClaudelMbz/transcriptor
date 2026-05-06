@@ -1,39 +1,77 @@
 # YouTube & TikTok Transcription
 
 ![Test Status](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/Test%20Application/badge.svg)
-![Deploy Status](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/Deploy%20to%20Docker%20Hub/badge.svg)
 
-Application web pour transcrire des vidéos YouTube et TikTok avec interface graphique moderne.
+Application web pour transcrire des vidéos YouTube et TikTok.
 
-## 🌟 Fonctionnalités
+## 🚀 Déploiement Rapide (Sans Docker)
 
-- ✅ Interface web responsive et moderne
-- ✅ Transcription YouTube (sous-titres natifs)
-- ✅ Transcription TikTok (via Whisper AI)
-- ✅ Détection automatique de la plateforme
-- ✅ Support multi-langues (Français, English, Auto)
-- ✅ Copie dans le presse-papier
-- ✅ Téléchargement en fichier texte
-- ✅ Interface desktop (tkinter) également disponible
+### Option 1: Render.com (Recommandé - Gratuit)
 
-## 🚀 Déploiement
+1. Créez un compte sur [Render.com](https://render.com)
+2. Cliquez sur "New +" → "Web Service"
+3. Connectez votre repo GitHub
+4. Render détectera automatiquement le `render.yaml`
+5. Cliquez sur "Create Web Service"
+6. ✅ Votre app sera déployée automatiquement !
 
-### Option 1: Docker (Recommandé)
+**Configuration automatique via GitHub Actions:**
+- Allez dans Render Dashboard → Settings → Deploy Hook
+- Copiez l'URL du Deploy Hook
+- Dans GitHub: Settings → Secrets → New secret
+  - Name: `RENDER_DEPLOY_HOOK_URL`
+  - Value: [votre deploy hook URL]
+- Chaque push déclenchera un redéploiement automatique
+
+### Option 2: Railway.app (Gratuit)
+
+1. Créez un compte sur [Railway.app](https://railway.app)
+2. Cliquez sur "New Project" → "Deploy from GitHub repo"
+3. Sélectionnez votre repo
+4. Railway détectera automatiquement la configuration
+5. ✅ Déployé en quelques secondes !
+
+### Option 3: Vercel (Gratuit)
+
+1. Créez un compte sur [Vercel.com](https://vercel.com)
+2. Cliquez sur "Add New" → "Project"
+3. Importez votre repo GitHub
+4. Vercel détectera le `vercel.json`
+5. ✅ Déployé instantanément !
+
+**Note:** Vercel a des limitations pour les fonctions serverless (temps d'exécution limité). Préférez Render ou Railway pour TikTok.
+
+### Option 4: Heroku (Gratuit avec limitations)
 
 ```bash
-# Cloner le repo
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-cd YOUR_REPO
-
-# Lancer avec Docker Compose
-docker-compose up -d
-
-# Accéder à http://localhost:5000
+# Installer Heroku CLI
+# Puis:
+heroku login
+heroku create your-app-name
+git push heroku main
+heroku open
 ```
 
-### Option 2: Déploiement local
+### Option 5: GitHub Pages (Interface statique uniquement)
 
-**Prérequis:** Python 3.8+ et FFmpeg
+L'interface HTML sera déployée automatiquement sur GitHub Pages, mais sans backend (YouTube/TikTok ne fonctionneront pas).
+
+Pour activer:
+1. Settings → Pages
+2. Source: GitHub Actions
+3. L'interface sera disponible sur: `https://YOUR_USERNAME.github.io/YOUR_REPO`
+
+## 📦 Fichiers de Configuration
+
+- `render.yaml` - Configuration Render
+- `railway.json` - Configuration Railway  
+- `vercel.json` - Configuration Vercel
+- `Procfile` - Configuration Heroku
+- `runtime.txt` - Version Python
+- `.github/workflows/deploy-render.yml` - Auto-déploiement Render
+- `.github/workflows/deploy-pages.yml` - Déploiement GitHub Pages
+
+## 🛠️ Installation Locale
 
 ```bash
 # Installer FFmpeg
@@ -50,60 +88,22 @@ python app.py
 # Accéder à http://localhost:5000
 ```
 
-### Option 3: Interface Desktop (GUI)
+## 🌟 Fonctionnalités
+
+- ✅ Interface web responsive et moderne
+- ✅ Transcription YouTube (sous-titres natifs)
+- ✅ Transcription TikTok (via Whisper AI)
+- ✅ Détection automatique de la plateforme
+- ✅ Support multi-langues (Français, English, Auto)
+- ✅ Copie dans le presse-papier
+- ✅ Téléchargement en fichier texte
+- ✅ Interface desktop (tkinter) également disponible
+
+## 🖥️ Interface Desktop (GUI)
 
 ```bash
 pip install -r requirements.txt
 python youtube_transcription_gui.py
-```
-
-## 🐳 Docker Hub
-
-L'image Docker est automatiquement construite et publiée sur Docker Hub via GitHub Actions.
-
-```bash
-docker pull YOUR_DOCKERHUB_USERNAME/video-transcription:latest
-docker run -p 5000:5000 YOUR_DOCKERHUB_USERNAME/video-transcription:latest
-```
-
-## 📝 Configuration GitHub Actions
-
-Pour activer le déploiement automatique sur Docker Hub:
-
-1. Créez un compte sur [Docker Hub](https://hub.docker.com)
-2. Créez un Access Token dans Docker Hub (Account Settings > Security)
-3. Ajoutez ces secrets dans votre repo GitHub (Settings > Secrets):
-   - `DOCKERHUB_USERNAME`: votre nom d'utilisateur Docker Hub
-   - `DOCKERHUB_TOKEN`: votre access token Docker Hub
-
-## 🌐 Déploiement sur le Cloud
-
-### Heroku
-```bash
-heroku create your-app-name
-heroku container:push web
-heroku container:release web
-```
-
-### Railway / Render
-Connectez simplement votre repo GitHub et ces plateformes détecteront automatiquement le Dockerfile.
-
-## 📦 Structure du Projet
-
-```
-.
-├── app.py                          # Application Flask (web)
-├── youtube_transcription_gui.py    # Interface desktop (tkinter)
-├── youtube_transcription.py        # Script CLI
-├── templates/
-│   └── index.html                  # Interface web
-├── requirements.txt                # Dépendances Python
-├── Dockerfile                      # Configuration Docker
-├── docker-compose.yml              # Docker Compose
-└── .github/workflows/
-    ├── test.yml                    # Tests automatiques
-    ├── release.yml                 # Releases GitHub
-    └── deploy.yml                  # Déploiement Docker Hub
 ```
 
 ## 🛠️ Technologies
@@ -111,7 +111,23 @@ Connectez simplement votre repo GitHub et ces plateformes détecteront automatiq
 - **Backend**: Flask, Python
 - **Transcription**: youtube-transcript-api, Whisper AI, yt-dlp
 - **Frontend**: HTML, CSS, JavaScript (Vanilla)
-- **Déploiement**: Docker, GitHub Actions
+- **Déploiement**: Render, Railway, Vercel, Heroku, GitHub Actions
+
+## 📝 Variables d'Environnement (Optionnel)
+
+Aucune variable d'environnement n'est requise pour le fonctionnement de base.
+
+## 🎯 Comparaison des Plateformes
+
+| Plateforme | Gratuit | Auto-deploy | TikTok Support | Setup |
+|------------|---------|-------------|----------------|-------|
+| **Render** | ✅ | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
+| **Railway** | ✅ | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
+| **Vercel** | ✅ | ✅ | ⚠️ Limité | ⭐⭐⭐⭐ |
+| **Heroku** | ⚠️ Limité | ✅ | ✅ | ⭐⭐⭐ |
+| **GitHub Pages** | ✅ | ✅ | ❌ | ⭐⭐⭐⭐⭐ |
+
+**Recommandation:** Utilisez **Render.com** ou **Railway.app** pour la meilleure expérience gratuite.
 
 ## 📄 Licence
 
