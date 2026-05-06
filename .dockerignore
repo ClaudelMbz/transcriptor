@@ -31,7 +31,5 @@ README.md
 # Desktop app (not needed in Docker)
 youtube_transcription_gui.py
 
-# Output files
-*.txt
-!requirements.txt
+# Output files (but keep requirements.txt)
 transcripts/
